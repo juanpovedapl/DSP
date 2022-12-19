@@ -1,0 +1,42 @@
+%FPB frecuency phase band
+%fs freccuency sample
+%FPB,FSB,atenuacion,
+%esp_,s_f,esps_Fs
+function [senal,vecFrec,mag_esp_s]=filesp_poveda(Amplitudes,frecuencias,Fs,f_pass,f_stop)
+    num_p=200;%Determina el numero de periodos a graficar 
+    t=0:1/Fs:num_p/min(frecuencias)-1/Fs; %va desde 0 hasta el maximo periodo 
+    
+    senal=Amplitudes(1)*cos(2*pi*frecuencias(1)*t)+...
+          Amplitudes(2)*cos(2*pi*frecuencias(2)*t)+...
+          Amplitudes(3)*cos(2*pi*frecuencias(3)*t);
+    
+    plot(t,senal); %fig 1
+    puntos=length(senal);%Determina la resolución en la frecuencia 
+    vecFrec=0:Fs/puntos:Fs-Fs/puntos;
+    mag_esp_s=abs(fft(senal,puntos));
+
+    figure;%fig 2
+    stem(vecFrec,mag_esp_s);
+    wp=f_pass/(Fs/2);% Frecuencia de paso normalizada, se divide sobre la mitad de la frecuecnia de muestreo
+    ws=f_stop/(Fs/2); % Frecuencia de stop normalizada, se divide sobre la mitad ed la frecuancia de muestreo 
+    [n,Wn]=buttord(wp,ws,3,60);
+    [b,a]= butter(n,Wn);
+    figure; %fig 3
+    freqz(b,a,60,Fs)
+
+    senal_f=filter(b,a,senal);
+    figure; %fig 4
+    plot(t,senal_f);
+
+    mag_esp_s_f=abs(fft(senal_f,puntos));
+    figure; % fig 6
+    stem(vecFrec,mag_esp_s_f);
+   
+end
+
+%hacer un filtro con funcion buttord y butter
+%convolucion de la señal con el filtro con la funcion filter
+%graficar la funcion en tiempo y frecuencia 
+%sound warered wave record
+
+
