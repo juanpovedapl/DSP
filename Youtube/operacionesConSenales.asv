@@ -1,0 +1,19 @@
+clc; clear; close all; 
+load('recursosV1/ecg.mat');
+
+longitud = 2500;
+signal =sig(1:longitud,:);
+time =tm(1:longitud,:);
+plot(time,signal);
+grid on
+
+
+maxS = max (Signal);
+minS = min (SIgnal);
+
+%% Suma
+%Sirve para desplzar la senal en el eje horizontal 
+signalSuma + minS;
+figure(2)
+subplot(1,2,1)
+plot(TIempo,Signal)
